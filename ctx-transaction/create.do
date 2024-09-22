@@ -9,7 +9,8 @@ do {
         "Content-Type": "application/json"
     };
     body = `{
-        "customer_id": "1",
+        "customer_name": "luis",
+        "description": "example order",
         "order_lines": [
             {
                 "name": "example",

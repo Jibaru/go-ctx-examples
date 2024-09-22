@@ -9,6 +9,7 @@ import (
 )
 
 type MySQLOrderRepository struct {
+	commonRepository
 	db *sql.DB
 }
 
@@ -17,12 +18,14 @@ func NewMySQLOrderRepository(db *sql.DB) *MySQLOrderRepository {
 }
 
 func (r *MySQLOrderRepository) Save(ctx context.Context, order *domain.Order) error {
+	query := "INSERT INTO orders (id, customer_name, description created_on) VALUES (?, ?, ?, ?)"
+
 	tx, ok := ctx.Value(app.SessionKey).(*sql.Tx)
 	if ok {
-		_, err := tx.Exec("INSERT INTO orders (id, customer_id) VALUES (?, ?)", order.ID, order.CustomerID)
+		_, err := tx.Exec(query, order.ID, order.CustomerName, order.Description, order.CreatedOn)
 		return err
 	}
 
-	_, err := r.db.Exec("INSERT INTO orders (id, customer_id) VALUES (?, ?)", order.ID, order.CustomerID)
+	_, err := r.db.Exec(query, order.ID, order.CustomerName, order.Description, order.CreatedOn)
 	return err
 }

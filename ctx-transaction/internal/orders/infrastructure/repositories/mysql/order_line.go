@@ -9,6 +9,7 @@ import (
 )
 
 type MySQLOrderLineRepository struct {
+	commonRepository
 	db *sql.DB
 }
 

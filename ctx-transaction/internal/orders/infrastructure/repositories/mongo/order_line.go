@@ -11,6 +11,7 @@ import (
 )
 
 type MongoOrderLineRepository struct {
+	commonRepository
 	collection *mongo.Collection
 }
 

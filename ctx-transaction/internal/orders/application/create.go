@@ -2,6 +2,7 @@ package application
 
 import (
 	"context"
+	"time"
 
 	"github.com/jibaru/ctx-transaction/internal/orders/domain"
 )
@@ -12,9 +13,10 @@ type createOrderService struct {
 }
 
 type CreateOrderInput struct {
-	ID         string `json:"id"`
-	CustomerID string `json:"customer_id"`
-	OrderLines []struct {
+	ID           string  `json:"id"`
+	CustomerName string  `json:"customer_name"`
+	Description  *string `json:"description"`
+	OrderLines   []struct {
 		Name     string `json:"name"`
 		Quantity int    `json:"quantity"`
 	} `json:"order_lines"`
@@ -32,8 +34,10 @@ func NewCreateOrderService(
 
 func (s *createOrderService) Exec(ctx context.Context, input CreateOrderInput) error {
 	order := &domain.Order{
-		ID:         "1",
-		CustomerID: input.CustomerID,
+		ID:           s.orderRepo.NextID(),
+		CustomerName: input.CustomerName,
+		Description:  input.Description,
+		CreatedOn:    time.Now().UTC(),
 	}
 	if err := s.orderRepo.Save(ctx, order); err != nil {
 		return err
@@ -41,6 +45,7 @@ func (s *createOrderService) Exec(ctx context.Context, input CreateOrderInput) e
 
 	for _, line := range input.OrderLines {
 		orderLine := &domain.OrderLine{
+			ID:       s.orderLineRepo.NextID(),
 			OrderID:  order.ID,
 			Name:     line.Name,
 			Quantity: line.Quantity,

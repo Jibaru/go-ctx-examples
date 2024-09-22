@@ -11,6 +11,7 @@ import (
 )
 
 type MongoOrderRepository struct {
+	commonRepository
 	collection *mongo.Collection
 }
 
