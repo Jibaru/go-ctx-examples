@@ -23,7 +23,7 @@ func (h *CreateOrderHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.service.Exec(r.Context(), input); err != nil {
-		http.Error(w, "Failed to create order", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 

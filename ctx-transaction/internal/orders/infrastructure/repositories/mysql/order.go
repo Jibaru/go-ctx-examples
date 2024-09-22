@@ -18,7 +18,7 @@ func NewMySQLOrderRepository(db *sql.DB) *MySQLOrderRepository {
 }
 
 func (r *MySQLOrderRepository) Save(ctx context.Context, order *domain.Order) error {
-	query := "INSERT INTO orders (id, customer_name, description created_on) VALUES (?, ?, ?, ?)"
+	query := "INSERT INTO orders (id, customer_name, description, created_on) VALUES (?, ?, ?, ?)"
 
 	tx, ok := ctx.Value(app.SessionKey).(*sql.Tx)
 	if ok {
